@@ -36,9 +36,10 @@ Decoder FFN:
   h = ReLU(Cross_out · W1_d)
   Dec_out = h · W2_d
 
-Output:
-  ŷ = softmax(Wo · dec_out[-1])
-  L = -log(ŷ_target)
+Output (parallel, all positions):
+  Z = Dec_out · Wo^T            # [T×V] logits
+  ŷ = softmax(Z) row-wise       # [T×V] probabilities
+  L = (1/T) Σ -log(ŷ_target)   # average cross-entropy
 ```
 
 ## Toy Dataset
@@ -46,7 +47,7 @@ Output:
 - Source (Encoder): `["I", "like", "cats"]` → idx [0,1,2]
 - Target input (Decoder): `["<s>", "cats", "like"]` → idx [4,2,1]
 - Target output: `["cats", "like", "dogs"]`
-- Loss at last position: predict "dogs" (idx 3)
+- Loss at all positions: predict ["cats", "like", "dogs"] (idx [2,1,3])
 
 ## Dimensions
 | Param | Shape | Role |
@@ -67,7 +68,7 @@ d_model=2, d_k=2, d_ff=4, seq_len=3, vocab=5, 15 parameter matrices
 | Phase | Label | Steps |
 |---|---|---|
 | 0 | Encoder | init, full_embed, pos_enc, matmul_mm×3, scale_mask, attn_heatmap, matmul_mm, ffn_relu, matmul_mm (11) |
-| 1 | Decoder | init, full_embed, pos_enc, matmul_mm×3, scale_mask, attn_heatmap, matmul_mm, matmul_mm×3, scale_mask, attn_heatmap, matmul_mm, ffn_relu, matmul_mm, matmul, softmax, loss (20) |
+| 1 | Decoder | init, full_embed, pos_enc, matmul_mm×3, scale_mask, attn_heatmap, matmul_mm, matmul_mm×3, scale_mask, attn_heatmap, matmul_mm, ffn_relu, matmul_mm×2, softmax_parallel, loss_parallel (20) |
 
 ## Step Types
 | type | Visualization |
@@ -79,9 +80,8 @@ d_model=2, d_k=2, d_ff=4, seq_len=3, vocab=5, 15 parameter matrices
 | `scale_mask` | raw scores → scaled (+ optional causal mask) |
 | `attn_heatmap` | attention weight heatmap |
 | `ffn_relu` | input × W1 = pre_act → ReLU → post_act |
-| `matmul` | matrix × vector = vector |
-| `softmax` | probability bar chart |
-| `loss` | cross-entropy loss breakdown |
+| `softmax_parallel` | per-position softmax bar charts |
+| `loss_parallel` | per-position cross-entropy + average loss |
 
 ## Key Computed Values
 | Value | Result |
@@ -90,6 +90,7 @@ d_model=2, d_k=2, d_ff=4, seq_len=3, vocab=5, 15 parameter matrices
 | Enc Attention row 0 | [1.000, 0.000, 0.000] |
 | Dec Attention row 2 | [0.017, 0.018, 0.965] |
 | Cross Attention row 2 | [0.207, 0.289, 0.504] |
-| Dec_out[-1] | [-0.105, 0.371] |
-| Logits | [0.154, 0.012, 0.107, 0.276, 0.059] |
-| Loss | 1.459 |
+| Dec_out | [[-0.110, 0.401], [-0.108, 0.388], [-0.105, 0.371]] |
+| Logits (3×5) | [[0.167,...,0.065], [0.162,...,0.063], [0.154,...,0.059]] |
+| Losses | [1.630, 1.729, 1.459] |
+| Avg Loss | 1.606 |

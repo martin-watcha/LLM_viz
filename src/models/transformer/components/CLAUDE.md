@@ -7,8 +7,9 @@
 Props: `currentPhaseIdx: number`
 
 ### FormulaBar.jsx
-Full-width formula bar with three groups: Enc | Dec | Out.
+Phase-scoped formula bar: phase 0 shows Enc formulas only, phase 1 shows Dec + Out.
 Uses `HIGHLIGHT_MAP` keyed by `currentS.id` (e.g., `'p0_s3'`) to highlight active terms.
+Phase derived from `currentS.id.charAt(1)`.
 Props: `currentS: substep object`
 
 ### StepRenderer.jsx
@@ -20,7 +21,8 @@ Switch on `stepData.type`. Types:
 - `scale_mask` — ScaleMask component
 - `attn_heatmap` — AttentionHeatmap component
 - `ffn_relu` — FfnRelu component (input × W1 → ReLU)
-Reused shared types: `matmul`, `softmax`, `loss`
+- `softmax_parallel` — ParallelSoftmax (per-position softmax bars)
+- `loss_parallel` — ParallelLoss (per-position loss + average)
 
 ### PosEncoding.jsx
 Props: `X, PE, result, xLabel, peLabel, resultLabel`
@@ -34,6 +36,14 @@ Negative values in pre_act shown in red; zeroed cells in post_act shown in grey.
 ### AttentionHeatmap.jsx
 Props: `attention: number[][]`, `seq: string[]`, `colSeq?: string[]`, `causal: boolean`
 Colored grid (blue intensity = weight). Masked cells (j > i) shown as `—`.
+
+### ParallelSoftmax.jsx
+Props: `probs: number[][]`, `targetIndices: number[]`, `targetTokens: string[]`, `inputTokens: string[]`
+Per-position softmax probability bar charts with target tokens highlighted.
+
+### ParallelLoss.jsx
+Props: `probs: number[][]`, `targetIndices: number[]`, `targetTokens: string[]`, `inputTokens: string[]`, `losses: number[]`, `avgLoss: number`
+Per-position cross-entropy loss cards + average loss summary.
 
 ### ScaleMask.jsx
 Props: `rawScores: number[][]`, `scaledScores: number[][]`, `dk: number`, `causal: boolean`

@@ -33,15 +33,17 @@ models/{name}/
 |---|---|---|
 | `init` | Parameter tables + dataset overview | RNN, Transformer |
 | `embed` | Matrix with highlighted row → result vector | RNN |
-| `matmul` | Left matrix × right vector = result | RNN, Transformer |
+| `matmul` | Left matrix × right vector = result | RNN |
 | `tanh` | TanhGraph (shared) | RNN |
-| `softmax` | SoftmaxChart (shared) | RNN, Transformer |
-| `loss` | LossDisplay (shared) | RNN, Transformer |
+| `softmax` | SoftmaxChart (shared) | RNN |
+| `loss` | LossDisplay (shared) | RNN |
 | `full_embed` | E matrix with highlighted rows → X matrix | Transformer |
 | `matmul_mm` | matrix × matrix = matrix | Transformer |
 | `pos_enc` | X + PE = X_pe (three matrices) | Transformer |
 | `scale_mask` | raw scores → scaled (+ optional causal mask) | Transformer |
 | `attn_heatmap` | attention weight heatmap | Transformer |
 | `ffn_relu` | input × W1 → ReLU → post_act | Transformer |
+| `softmax_parallel` | per-position softmax bar charts | Transformer |
+| `loss_parallel` | per-position cross-entropy + average loss | Transformer |
 
 Add new types here when a model needs a unique operation (e.g., `gate`, `ssm`).
