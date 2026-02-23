@@ -63,7 +63,7 @@ const FormulaBar = ({ currentS }) => {
           <span className="text-slate-300">|</span>
           <span className={hl(['enc_attn'])}>Attn(</span>
           <span className={hl(['enc_score'])}>QK<sup>T</sup></span>
-          <span className={hl(['enc_scale'])}>/√d</span>
+          <span className={hl(['enc_scale'])}>/√d<sub>k</sub></span>
           <span className={hl(['enc_attn'])}>)</span>
           <span className="text-slate-300">|</span>
           <span className={hl(['enc_attn_out'])}>AV</span>
@@ -81,7 +81,7 @@ const FormulaBar = ({ currentS }) => {
             <span className={hl(['dec_pe'])}>+PE</span>
             <span className="text-slate-300">|</span>
             <span className={hl(['dec_mask'])}>Mask(</span>
-            <span className={hl(['dec_score'])}>QK<sup>T</sup>/√d</span>
+            <span className={hl(['dec_score'])}>QK<sup>T</sup>/√d<sub>k</sub></span>
             <span className={hl(['dec_mask'])}>)</span>
             <span className="text-slate-300">|</span>
             <span className={hl(['cross_Q', 'cross_K', 'cross_V', 'cross_score', 'cross_attn', 'cross_out'])}>Cross</span>
