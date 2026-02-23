@@ -36,6 +36,7 @@ const HIGHLIGHT_MAP = {
 
 const FormulaBar = ({ currentS }) => {
   const active = HIGHLIGHT_MAP[currentS?.id] ?? [];
+  const phase = parseInt(currentS?.id?.charAt(1) ?? '0');
 
   const hl = (terms) => {
     const hit = terms.some(t => active.includes(t));
@@ -51,54 +52,55 @@ const FormulaBar = ({ currentS }) => {
       className="w-full bg-white border-b border-slate-200 py-3 flex flex-col md:flex-row flex-wrap items-center justify-center gap-2 md:gap-4 font-mono text-[10px] sm:text-xs md:text-sm shadow-sm z-10 select-none"
       style={{ fontFamily: "'JetBrains Mono', 'Fira Code', Consolas, monospace" }}
     >
-      {/* Group 1: Encoder */}
-      <div className={`flex items-center gap-1 transition-opacity duration-300 ${groupActive(['enc_embed', 'enc_pe', 'enc_Q', 'enc_K', 'enc_V', 'enc_score', 'enc_scale', 'enc_attn', 'enc_attn_out', 'enc_ffn1', 'enc_ffn2'])}`}>
-        <span className="text-slate-300 text-[9px] mr-1">Enc</span>
-        <span className={hl(['enc_embed'])}>X=E[src]</span>
-        <span className="text-slate-300">|</span>
-        <span className={hl(['enc_pe'])}>+PE</span>
-        <span className="text-slate-300">|</span>
-        <span className={hl(['enc_Q', 'enc_K', 'enc_V'])}>Q,K,V</span>
-        <span className="text-slate-300">|</span>
-        <span className={hl(['enc_attn'])}>Attn(</span>
-        <span className={hl(['enc_score'])}>QK<sup>T</sup></span>
-        <span className={hl(['enc_scale'])}>/√d</span>
-        <span className={hl(['enc_attn'])}>)</span>
-        <span className="text-slate-300">|</span>
-        <span className={hl(['enc_attn_out'])}>AV</span>
-        <span className="text-slate-300">|</span>
-        <span className={hl(['enc_ffn1', 'enc_ffn2'])}>FFN</span>
-      </div>
+      {phase === 0 && (
+        <div className={`flex items-center gap-1 transition-opacity duration-300 ${groupActive(['enc_embed', 'enc_pe', 'enc_Q', 'enc_K', 'enc_V', 'enc_score', 'enc_scale', 'enc_attn', 'enc_attn_out', 'enc_ffn1', 'enc_ffn2'])}`}>
+          <span className="text-slate-300 text-[9px] mr-1">Enc</span>
+          <span className={hl(['enc_embed'])}>X=E[src]</span>
+          <span className="text-slate-300">|</span>
+          <span className={hl(['enc_pe'])}>+PE</span>
+          <span className="text-slate-300">|</span>
+          <span className={hl(['enc_Q', 'enc_K', 'enc_V'])}>Q,K,V</span>
+          <span className="text-slate-300">|</span>
+          <span className={hl(['enc_attn'])}>Attn(</span>
+          <span className={hl(['enc_score'])}>QK<sup>T</sup></span>
+          <span className={hl(['enc_scale'])}>/√d</span>
+          <span className={hl(['enc_attn'])}>)</span>
+          <span className="text-slate-300">|</span>
+          <span className={hl(['enc_attn_out'])}>AV</span>
+          <span className="text-slate-300">|</span>
+          <span className={hl(['enc_ffn1', 'enc_ffn2'])}>FFN</span>
+        </div>
+      )}
 
-      <div className="hidden md:block w-px h-5 bg-slate-300" />
+      {phase === 1 && (
+        <>
+          <div className={`flex items-center gap-1 transition-opacity duration-300 ${groupActive(['dec_embed', 'dec_pe', 'dec_Q', 'dec_K', 'dec_V', 'dec_score', 'dec_mask', 'dec_attn', 'dec_attn_out', 'cross_Q', 'cross_K', 'cross_V', 'cross_score', 'cross_attn', 'cross_out', 'dec_ffn1', 'dec_ffn2'])}`}>
+            <span className="text-slate-300 text-[9px] mr-1">Dec</span>
+            <span className={hl(['dec_embed'])}>X=E[tgt]</span>
+            <span className="text-slate-300">|</span>
+            <span className={hl(['dec_pe'])}>+PE</span>
+            <span className="text-slate-300">|</span>
+            <span className={hl(['dec_mask'])}>Mask(</span>
+            <span className={hl(['dec_score'])}>QK<sup>T</sup>/√d</span>
+            <span className={hl(['dec_mask'])}>)</span>
+            <span className="text-slate-300">|</span>
+            <span className={hl(['cross_Q', 'cross_K', 'cross_V', 'cross_score', 'cross_attn', 'cross_out'])}>Cross</span>
+            <span className="text-slate-300">|</span>
+            <span className={hl(['dec_ffn1', 'dec_ffn2'])}>FFN</span>
+          </div>
 
-      {/* Group 2: Decoder */}
-      <div className={`flex items-center gap-1 transition-opacity duration-300 ${groupActive(['dec_embed', 'dec_pe', 'dec_Q', 'dec_K', 'dec_V', 'dec_score', 'dec_mask', 'dec_attn', 'dec_attn_out', 'cross_Q', 'cross_K', 'cross_V', 'cross_score', 'cross_attn', 'cross_out', 'dec_ffn1', 'dec_ffn2'])}`}>
-        <span className="text-slate-300 text-[9px] mr-1">Dec</span>
-        <span className={hl(['dec_embed'])}>X=E[tgt]</span>
-        <span className="text-slate-300">|</span>
-        <span className={hl(['dec_pe'])}>+PE</span>
-        <span className="text-slate-300">|</span>
-        <span className={hl(['dec_mask'])}>Mask(</span>
-        <span className={hl(['dec_score'])}>QK<sup>T</sup>/√d</span>
-        <span className={hl(['dec_mask'])}>)</span>
-        <span className="text-slate-300">|</span>
-        <span className={hl(['cross_Q', 'cross_K', 'cross_V', 'cross_score', 'cross_attn', 'cross_out'])}>Cross</span>
-        <span className="text-slate-300">|</span>
-        <span className={hl(['dec_ffn1', 'dec_ffn2'])}>FFN</span>
-      </div>
+          <div className="hidden md:block w-px h-5 bg-slate-300" />
 
-      <div className="hidden md:block w-px h-5 bg-slate-300" />
-
-      {/* Group 3: Output */}
-      <div className={`flex items-center gap-1 transition-opacity duration-300 ${groupActive(['out_proj', 'softmax', 'loss'])}`}>
-        <span className="text-slate-300 text-[9px] mr-1">Out</span>
-        <span className={hl(['out_proj'])}>Z=X·W<sub>o</sub><sup>T</sup></span>
-        <span className="text-slate-300">|</span>
-        <span className={hl(['softmax'])}>softmax</span>
-        <span className="text-slate-300">|</span>
-        <span className={hl(['loss'])}>L=avg(-log)</span>
-      </div>
+          <div className={`flex items-center gap-1 transition-opacity duration-300 ${groupActive(['out_proj', 'softmax', 'loss'])}`}>
+            <span className="text-slate-300 text-[9px] mr-1">Out</span>
+            <span className={hl(['out_proj'])}>Z=X·W<sub>o</sub><sup>T</sup></span>
+            <span className="text-slate-300">|</span>
+            <span className={hl(['softmax'])}>softmax</span>
+            <span className="text-slate-300">|</span>
+            <span className={hl(['loss'])}>L=avg(-log)</span>
+          </div>
+        </>
+      )}
     </div>
   );
 };
