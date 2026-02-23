@@ -82,7 +82,6 @@ const RNNView = ({ onBack }) => {
           className="bg-slate-50 px-3 py-1.5 rounded border border-slate-200 text-xs font-mono text-slate-700 flex items-center gap-2 max-w-[50%] overflow-x-auto select-text"
           style={{ fontFamily: "'JetBrains Mono', 'Fira Code', 'Roboto Mono', Consolas, monospace" }}
         >
-          <span className="text-slate-400 font-sans shrink-0 select-none">Eq:</span>
           <span className="tracking-wide whitespace-nowrap">{currentS.formula}</span>
         </div>
       </header>
