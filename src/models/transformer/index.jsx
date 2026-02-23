@@ -78,12 +78,6 @@ const TransformerView = ({ onBack }) => {
             <h1 className="text-sm font-bold text-slate-700">Transformer</h1>
           </div>
         </div>
-        <div
-          className="bg-slate-50 px-3 py-1.5 rounded border border-slate-200 text-xs font-mono text-slate-700 flex items-center gap-2 max-w-[50%] overflow-x-auto select-text"
-          style={{ fontFamily: "'JetBrains Mono', 'Fira Code', Consolas, monospace" }}
-        >
-          <span className="tracking-wide whitespace-nowrap">{currentS.formula}</span>
-        </div>
       </header>
 
       <div className="flex flex-1 overflow-hidden">
