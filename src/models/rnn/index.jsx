@@ -89,18 +89,18 @@ const RNNView = ({ onBack }) => {
 
       <div className="flex flex-1 overflow-hidden">
         {/* SIDEBAR */}
-        <aside className="w-56 bg-white border-r border-slate-200 flex-col overflow-y-auto hidden md:flex shrink-0 select-none">
-          <div className="p-3 bg-slate-50 border-b border-slate-200 text-[10px] font-bold text-slate-500 uppercase sticky top-0 z-10">
+        <aside className="w-64 bg-white border-r border-slate-200 flex-col overflow-y-auto hidden md:flex shrink-0 select-none">
+          <div className="p-3 bg-slate-50 border-b border-slate-200 text-xs font-bold text-slate-500 uppercase sticky top-0 z-10">
             Timeline
           </div>
-          <div className="p-3 space-y-4">
+          <div className="p-3 space-y-5">
             {STEPS_DATA.map((t, ti) => (
               <div key={ti}>
                 <div
-                  className={`flex items-center mb-2 cursor-pointer text-xs font-bold ${ti === tIndex ? 'text-blue-600' : 'text-slate-500'}`}
+                  className={`flex items-center mb-2 cursor-pointer text-sm font-bold ${ti === tIndex ? 'text-blue-600' : 'text-slate-500'}`}
                   onClick={() => jumpToStep(ti, 0)}
                 >
-                  <div className={`w-4 h-4 rounded-full flex items-center justify-center mr-2 text-[8px] ${ti === tIndex ? 'bg-blue-100 text-blue-700' : 'bg-slate-100'}`}>
+                  <div className={`w-5 h-5 rounded-full flex items-center justify-center mr-2 text-[10px] ${ti === tIndex ? 'bg-blue-100 text-blue-700' : 'bg-slate-100'}`}>
                     t{t.timestep}
                   </div>
                   {ti === 0 ? 'Init' : `Input: "${t.token}"`}
@@ -112,7 +112,7 @@ const RNNView = ({ onBack }) => {
                       <div
                         key={si}
                         onClick={() => jumpToStep(ti, si)}
-                        className={`py-1 px-2 rounded cursor-pointer text-[10px] transition-colors ${isActive ? 'bg-blue-50 text-blue-700 font-bold' : 'text-slate-400 hover:bg-slate-50'}`}
+                        className={`py-1.5 px-2 rounded cursor-pointer text-xs transition-colors ${isActive ? 'bg-blue-50 text-blue-700 font-bold' : 'text-slate-400 hover:bg-slate-50'}`}
                       >
                         {s.title}
                       </div>
@@ -129,14 +129,14 @@ const RNNView = ({ onBack }) => {
           <FlowDiagram currentT={currentT.timestep} />
           <FormulaBar currentT={currentT.timestep} currentS={currentS} />
 
-          <div className="flex-1 flex flex-col items-center justify-center p-4">
-            <div className="text-center mb-6 max-w-xl mt-4 select-none">
-              <h2 className="text-lg font-bold text-slate-800 mb-2">{currentS.title}</h2>
-              <p className="text-[11px] text-slate-500 bg-white px-3 py-1.5 rounded-full border border-slate-200 inline-block shadow-sm">
+          <div className="flex-1 flex flex-col items-center justify-center p-8">
+            <div className="text-center mb-10 select-none">
+              <h2 className="text-2xl font-bold text-slate-800 mb-3">{currentS.title}</h2>
+              <p className="text-sm text-slate-500 bg-white px-5 py-2 rounded-full border border-slate-200 inline-block shadow-sm">
                 {currentS.desc}
               </p>
             </div>
-            <div className="w-full flex justify-center min-h-[200px]">
+            <div className="w-full flex justify-center">
               <StepRenderer stepData={currentS} />
             </div>
           </div>

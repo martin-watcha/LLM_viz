@@ -5,9 +5,9 @@ const TanhGraph = ({ inputVal, outputVal }) => {
   }
 
   return (
-    <div className="flex flex-col items-center p-4 bg-white rounded border border-slate-200 w-full max-w-sm">
-      <h4 className="text-xs font-bold text-slate-700 mb-4 select-none">tanh Activation</h4>
-      <svg viewBox="0 0 240 80" className="w-full h-24 overflow-visible">
+    <div className="flex flex-col items-center p-8 bg-white rounded-xl border border-slate-200 w-full max-w-2xl">
+      <h4 className="text-base font-bold text-slate-700 mb-6 select-none">tanh Activation</h4>
+      <svg viewBox="0 0 240 80" className="w-full h-64 overflow-visible">
         <line x1="0" y1="40" x2="240" y2="40" stroke="#e2e8f0" strokeWidth="1" />
         <line x1="120" y1="0" x2="120" y2="80" stroke="#e2e8f0" strokeWidth="1" />
         <polyline points={points.join(' ')} fill="none" stroke="#94a3b8" strokeWidth="2" />
@@ -22,9 +22,9 @@ const TanhGraph = ({ inputVal, outputVal }) => {
           </g>
         ))}
       </svg>
-      <div className="mt-4 flex gap-2 font-mono">
+      <div className="mt-6 flex gap-4 font-mono">
         {inputVal.map((v, idx) => (
-          <div key={idx} className="text-[10px] bg-slate-50 p-1.5 rounded border border-slate-100 text-center">
+          <div key={idx} className="text-base bg-slate-50 px-4 py-3 rounded-lg border border-slate-100 text-center">
             <span className="text-slate-500">In:</span> {v.toFixed(2)} &rarr;{' '}
             <span className="text-blue-600 font-bold">Out: {outputVal[idx].toFixed(2)}</span>
           </div>
