@@ -12,7 +12,7 @@ Each model is broken into discrete substeps with formulas, diagrams, and numeric
 | Model | Status | Directory |
 |---|---|---|
 | Vanilla RNN | ✅ Complete | `src/models/rnn/` |
-| Transformer | 🔲 Planned | `src/models/transformer/` |
+| Transformer | ✅ Complete | `src/models/transformer/` |
 | Linear RNN | 🔲 Planned | `src/models/linear_rnn/` |
 | Mamba (SSM) | 🔲 Planned | `src/models/mamba/` |
 | Titans (MAC) | 🔲 Planned | `src/models/titans/` |

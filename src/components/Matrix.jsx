@@ -1,4 +1,4 @@
-const Matrix = ({ data, highlightRow = -1, highlightCol = -1, label = "" }) => {
+const Matrix = ({ data, highlightRow = -1, highlightCol = -1, highlightRows = [], label = "" }) => {
   const is1D = Array.isArray(data) && !Array.isArray(data[0]);
   const renderData = is1D ? data.map(val => [val]) : data;
 
@@ -11,6 +11,7 @@ const Matrix = ({ data, highlightRow = -1, highlightCol = -1, label = "" }) => {
             <div key={i} className="flex gap-0.5">
               {row.map((val, j) => {
                 const isHighlighted =
+                  (highlightRows.length > 0 && highlightRows.includes(i) && highlightCol === -1) ||
                   (highlightRow === i && highlightCol === -1) ||
                   (highlightCol === j && highlightRow === -1) ||
                   (highlightRow === i && highlightCol === j);

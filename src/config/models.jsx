@@ -11,9 +11,9 @@ export const MODELS = [
   {
     id: 'transformer',
     name: 'Transformer',
-    desc: 'Self-Attention 메커니즘. Q, K, V 행렬 생성 및 Attention Score 계산 과정을 다룹니다.',
+    desc: 'Encoder-Decoder 구조. Self-Attention, Cross-Attention, Causal Mask 과정을 다룹니다.',
     icon: <Layers size={24} />,
-    ready: false,
+    ready: true,
   },
   {
     id: 'linear_rnn',
