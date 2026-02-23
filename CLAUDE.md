@@ -27,7 +27,7 @@ src/
 ```
 
 ## Adding a New Model
-1. Create `src/models/{name}/` with `data.js`, `index.jsx`, `components/`
-2. Add entry in `src/config/models.js` with `ready: true`
+1. Create `src/models/{name}/` with `data.jsx`, `index.jsx`, `components/`
+2. Add entry in `src/config/models.jsx` with `ready: true`
 3. Add route in `App.jsx`
 4. See `src/models/CLAUDE.md` for full conventions

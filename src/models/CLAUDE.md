@@ -6,7 +6,7 @@ Each model is a self-contained module. One folder per model.
 ```
 models/{name}/
 ├── CLAUDE.md           # Model description, formula reference, data format
-├── data.js             # All constants: vocab, params, STEPS_DATA
+├── data.jsx            # All constants: vocab, params, STEPS_DATA
 ├── index.jsx           # The View: play/step state, layout, keyboard nav
 └── components/
     ├── CLAUDE.md
@@ -15,10 +15,10 @@ models/{name}/
     └── StepRenderer.jsx # Switch on step type → correct visualization
 ```
 
-## data.js Conventions
+## data.jsx Conventions
 - Named exports: `VOCAB`, `MODEL_PARAMS`, `STEPS_DATA`
-- `STEPS_DATA`: array of timestep objects, each with a `substeps` array
-- No JSX in data.js — formula JSX lives in components
+- `STEPS_DATA`: array of timestep/phase objects, each with a `substeps` array
+- Formula JSX (`<span>...</span>`) is stored in each substep's `formula` field
 
 ## index.jsx Conventions
 - State: `tIndex`, `subStepIndex`, `isPlaying`, `speed`
@@ -29,13 +29,19 @@ models/{name}/
 ## Step Type Registry
 `StepRenderer` switches on `substep.type`:
 
-| type | Visualization |
-|---|---|
-| `init` | Parameter tables + dataset overview |
-| `embed` | Matrix with highlighted row → result vector |
-| `matmul` | Left matrix × right vector = result |
-| `tanh` | TanhGraph (shared) |
-| `softmax` | SoftmaxChart (shared) |
-| `loss` | LossDisplay (shared) |
+| type | Visualization | Used by |
+|---|---|---|
+| `init` | Parameter tables + dataset overview | RNN, Transformer |
+| `embed` | Matrix with highlighted row → result vector | RNN |
+| `matmul` | Left matrix × right vector = result | RNN, Transformer |
+| `tanh` | TanhGraph (shared) | RNN |
+| `softmax` | SoftmaxChart (shared) | RNN, Transformer |
+| `loss` | LossDisplay (shared) | RNN, Transformer |
+| `full_embed` | E matrix with highlighted rows → X matrix | Transformer |
+| `matmul_mm` | matrix × matrix = matrix | Transformer |
+| `pos_enc` | X + PE = X_pe (three matrices) | Transformer |
+| `scale_mask` | raw scores → scaled (+ optional causal mask) | Transformer |
+| `attn_heatmap` | attention weight heatmap | Transformer |
+| `ffn_relu` | input × W1 → ReLU → post_act | Transformer |
 
-Add new types here when a model needs a unique operation (e.g., `attention`, `gate`, `ssm`).
+Add new types here when a model needs a unique operation (e.g., `gate`, `ssm`).

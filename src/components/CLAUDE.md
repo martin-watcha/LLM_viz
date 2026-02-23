@@ -5,7 +5,7 @@ All shared UI — both reusable primitives and model-agnostic screens.
 ## Shared Visualizations
 | File | Props | Purpose |
 |---|---|---|
-| `Matrix.jsx` | `data, highlightRow, highlightCol, label` | 1D/2D array as a grid with optional row/col highlight |
+| `Matrix.jsx` | `data, highlightRow, highlightCol, highlightRows, label` | 1D/2D array as a grid with optional row/col/rows highlight |
 | `TanhGraph.jsx` | `inputVal[], outputVal[]` | SVG tanh curve with plotted input→output points |
 | `SoftmaxChart.jsx` | `output[], targetIdx` | Bar chart of softmax probability distribution |
 | `LossDisplay.jsx` | `data` | Cross-entropy loss breakdown: one-hot vs predicted |

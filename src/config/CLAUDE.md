@@ -1,9 +1,9 @@
 # src/config/
 
-## models.js
+## models.jsx
 Single source of truth for all model metadata displayed on HomeScreen.
 
-```js
+```jsx
 export const MODELS = [
   {
     id: 'rnn',           // matches folder name under src/models/ and route key in App.jsx
