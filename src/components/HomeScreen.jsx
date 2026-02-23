@@ -7,10 +7,9 @@ const HomeScreen = ({ onSelect }) => (
       <div className="w-16 h-16 bg-blue-600 rounded-2xl flex items-center justify-center mb-6 shadow-lg shadow-blue-600/20">
         <Terminal size={32} className="text-white" />
       </div>
-      <h1 className="text-3xl font-extrabold text-slate-900 tracking-tight mb-3">AI by Hand Visualizer</h1>
+      <h1 className="text-3xl font-extrabold text-slate-900 tracking-tight mb-3">LLM Visualizer</h1>
       <p className="text-slate-500 max-w-xl text-sm leading-relaxed">
-        블랙박스처럼 느껴지는 AI 모델들의 내부 연산을 직접 눈으로 확인하세요.<br />
-        행렬 곱셈부터 어텐션, 상태 업데이트까지 숫자가 어떻게 흘러가는지 한 단계씩 따라가며 이해할 수 있습니다.
+        LLM 내부를 한 단계씩 시각화해봤습니다.
       </p>
     </header>
 

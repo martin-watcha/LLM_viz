@@ -1,4 +1,4 @@
-# LLM_viz — AI by Hand Visualizer
+# LLM_viz — LLM Visualizer
 
 ## Purpose
 Step-by-step interactive visualization of AI/LLM model internals for educational use.
