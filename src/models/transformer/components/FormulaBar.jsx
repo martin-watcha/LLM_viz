@@ -93,11 +93,11 @@ const FormulaBar = ({ currentS }) => {
       {/* Group 3: Output */}
       <div className={`flex items-center gap-1 transition-opacity duration-300 ${groupActive(['out_proj', 'softmax', 'loss'])}`}>
         <span className="text-slate-300 text-[9px] mr-1">Out</span>
-        <span className={hl(['out_proj'])}>ŷ=W<sub>o</sub>·ctx</span>
+        <span className={hl(['out_proj'])}>Z=X·W<sub>o</sub><sup>T</sup></span>
         <span className="text-slate-300">|</span>
         <span className={hl(['softmax'])}>softmax</span>
         <span className="text-slate-300">|</span>
-        <span className={hl(['loss'])}>L=-log(ŷ)</span>
+        <span className={hl(['loss'])}>L=avg(-log)</span>
       </div>
     </div>
   );

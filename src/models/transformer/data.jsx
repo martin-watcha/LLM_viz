@@ -72,10 +72,12 @@ const DEC_FFN_PRE  = [[0.685, 0.102, 0.223, -0.151], [0.666, 0.097, 0.219, -0.14
 const DEC_FFN_POST = [[0.685, 0.102, 0.223, 0.000], [0.666, 0.097, 0.219, 0.000], [0.640, 0.089, 0.213, 0.000]];
 const DEC_OUT       = [[-0.110, 0.401], [-0.108, 0.388], [-0.105, 0.371]];
 
-// ── Output pre-computed values ─────────────────────────────────────────────
-const LOGITS = [0.154, 0.012, 0.107, 0.276, 0.059];
-const PROBS  = [0.206, 0.178, 0.196, 0.232, 0.187];
-const LOSS   = 1.459;
+// ── Output pre-computed values (parallel, all positions) ──────────────────
+const WoT    = [[0.3, 0.6, 0.4, 0.2, 0.5], [0.5, 0.2, 0.4, 0.8, 0.3]]; // Wo^T (2×5)
+const LOGITS = [[0.167, 0.014, 0.116, 0.299, 0.065], [0.162, 0.013, 0.112, 0.289, 0.063], [0.154, 0.012, 0.107, 0.276, 0.059]];
+const PROBS  = [[0.206, 0.177, 0.196, 0.235, 0.186], [0.206, 0.178, 0.196, 0.234, 0.187], [0.206, 0.178, 0.196, 0.232, 0.187]];
+const LOSSES = [1.630, 1.729, 1.459];
+const AVG_LOSS = 1.606;
 
 // ── STEPS_DATA: 2 phases, 31 substeps ───────────────────────────────────────
 export const STEPS_DATA = [
@@ -360,26 +362,38 @@ export const STEPS_DATA = [
         formula: <span>Dec<sub>out</sub> = h · W<sub>2_d</sub></span>,
       },
       {
-        id: "p1_s18", type: "matmul",
-        title: "㉗ Logits = Wo · dec_out[-1]",
-        desc: "마지막 위치의 Decoder 출력으로 다음 토큰 예측 logits 계산",
-        data: { left: MODEL_PARAMS.Wo, right: DEC_OUT[2], result: LOGITS,
-                leftLabel: "Wo (5×2)", rightLabel: "ctx[-1]" },
-        formula: <span>z = W<sub>o</sub> · dec_out<sub>[-1]</sub></span>,
+        id: "p1_s18", type: "matmul_mm",
+        title: "㉗ Logits = Dec_out · Woᵀ",
+        desc: "모든 위치의 Decoder 출력에서 다음 토큰 예측 logits를 병렬 계산 → [3×5]",
+        data: { left: DEC_OUT, right: WoT, result: LOGITS,
+                leftLabel: "Dec_out (3×2)", rightLabel: "Woᵀ (2×5)", resultLabel: "Logits (3×5)" },
+        formula: <span>Z = Dec<sub>out</sub> · W<sub>o</sub><sup>T</sup></span>,
       },
       {
-        id: "p1_s19", type: "softmax",
-        title: "㉘ Softmax → 확률 분포",
-        desc: "Logits → 다음 토큰 예측 확률 분포",
-        data: { input: LOGITS, output: PROBS, target_idx: 3 },
-        formula: <span>ŷ = softmax(z)</span>,
+        id: "p1_s19", type: "softmax_parallel",
+        title: "㉘ Softmax → 확률 분포 (전체 위치)",
+        desc: "각 위치별 Logits에 row-wise Softmax → [3×5] 확률 행렬",
+        data: {
+          probs: PROBS,
+          targetIndices: [2, 1, 3],
+          targetTokens: TARGET_OUT,
+          inputTokens: TARGET_IN,
+        },
+        formula: <span>ŷ = softmax(Z) row-wise</span>,
       },
       {
-        id: "p1_s20", type: "loss",
-        title: "㉙ Loss 계산",
-        desc: '-log(P("dogs")) = -log(0.232) = 1.459',
-        data: { targetToken: "dogs", targetIdx: 3, probs: PROBS, loss: LOSS },
-        formula: <span>L = -log(P("dogs"))</span>,
+        id: "p1_s20", type: "loss_parallel",
+        title: "㉙ Loss 계산 (전체 위치)",
+        desc: "각 위치별 Cross-Entropy Loss → 평균",
+        data: {
+          probs: PROBS,
+          targetIndices: [2, 1, 3],
+          targetTokens: TARGET_OUT,
+          inputTokens: TARGET_IN,
+          losses: LOSSES,
+          avgLoss: AVG_LOSS,
+        },
+        formula: <span>L = (1/T) Σ -log(ŷ<sub>target</sub>)</span>,
       },
     ],
   },

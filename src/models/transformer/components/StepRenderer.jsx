@@ -1,10 +1,10 @@
 import Matrix from '../../../components/Matrix';
-import SoftmaxChart from '../../../components/SoftmaxChart';
-import LossDisplay from '../../../components/LossDisplay';
 import AttentionHeatmap from './AttentionHeatmap';
 import ScaleMask from './ScaleMask';
 import PosEncoding from './PosEncoding';
 import FfnRelu from './FfnRelu';
+import ParallelSoftmax from './ParallelSoftmax';
+import ParallelLoss from './ParallelLoss';
 import { VOCAB } from '../data';
 
 const StepRenderer = ({ stepData }) => {
@@ -107,22 +107,27 @@ const StepRenderer = ({ stepData }) => {
         />
       );
 
-    case 'matmul':
+    case 'softmax_parallel':
       return (
-        <div className="flex items-center justify-center gap-4">
-          <Matrix data={data.left}   label={data.leftLabel} />
-          <div className="text-2xl font-bold text-slate-300">&times;</div>
-          <Matrix data={data.right}  label={data.rightLabel} />
-          <div className="text-2xl font-bold text-slate-300">=</div>
-          <Matrix data={data.result} highlightCol={0} label="Logits" />
-        </div>
+        <ParallelSoftmax
+          probs={data.probs}
+          targetIndices={data.targetIndices}
+          targetTokens={data.targetTokens}
+          inputTokens={data.inputTokens}
+        />
       );
 
-    case 'softmax':
-      return <SoftmaxChart output={data.output} targetIdx={data.target_idx} vocab={VOCAB} />;
-
-    case 'loss':
-      return <LossDisplay data={data} vocab={VOCAB} />;
+    case 'loss_parallel':
+      return (
+        <ParallelLoss
+          probs={data.probs}
+          targetIndices={data.targetIndices}
+          targetTokens={data.targetTokens}
+          inputTokens={data.inputTokens}
+          losses={data.losses}
+          avgLoss={data.avgLoss}
+        />
+      );
 
     default:
       return null;
